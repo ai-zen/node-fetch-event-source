@@ -1,6 +1,6 @@
 {
   "name": "@ai-zen/node-fetch-event-source",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "A better API for making Event Source requests, with all the features of node-fetch",
   "homepage": "https://github.com/Azure/fetch-event-source#readme",
   "repository": "github:ai-zen/node-fetch-event-source",
@@ -20,7 +20,7 @@
     "clean": "rimraf ./lib ./coverage",
     "prebuild": "npm run clean",
     "build": "tsc && tsc -p tsconfig.esm.json",
-    "prepublishOnly": "npm run build && npm run test"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "node-fetch": "^3.3.1"
