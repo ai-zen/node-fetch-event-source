@@ -1,4 +1,6 @@
+import fetch from 'node-fetch';
 import { EventSourceMessage, getBytes, getLines, getMessages } from './parse';
+import nodeFetch, { RequestInfo, RequestInit, Response } from 'node-fetch'
 
 export const EventStreamContentType = 'text/event-stream';
 
@@ -42,12 +44,12 @@ export interface FetchEventSourceInit extends RequestInit {
      */
     onerror?: (err: any) => number | null | undefined | void,
 
-    /**
-     * If true, will keep the request open even if the document is hidden.
-     * By default, fetchEventSource will close the request and reopen it
-     * automatically when the document becomes visible again.
-     */
-    openWhenHidden?: boolean;
+    // /**
+    //  * If true, will keep the request open even if the document is hidden.
+    //  * By default, fetchEventSource will close the request and reopen it
+    //  * automatically when the document becomes visible again.
+    //  */
+    // openWhenHidden?: boolean;
 
     /** The Fetch function to use. Defaults to window.fetch */
     fetch?: typeof fetch;
@@ -60,7 +62,7 @@ export function fetchEventSource(input: RequestInfo, {
     onmessage,
     onclose,
     onerror,
-    openWhenHidden,
+    // openWhenHidden,
     fetch: inputFetch,
     ...rest
 }: FetchEventSourceInit) {
@@ -72,22 +74,22 @@ export function fetchEventSource(input: RequestInfo, {
         }
 
         let curRequestController: AbortController;
-        function onVisibilityChange() {
-            curRequestController.abort(); // close existing request on every visibility change
-            if (!document.hidden) {
-                create(); // page is now visible again, recreate request.
-            }
-        }
+        // function onVisibilityChange() {
+        //     curRequestController.abort(); // close existing request on every visibility change
+        //     if (!document.hidden) {
+        //         create(); // page is now visible again, recreate request.
+        //     }
+        // }
 
-        if (!openWhenHidden) {
-            document.addEventListener('visibilitychange', onVisibilityChange);
-        }
+        // if (!openWhenHidden) {
+        //     document.addEventListener('visibilitychange', onVisibilityChange);
+        // }
 
         let retryInterval = DefaultRetryInterval;
-        let retryTimer = 0;
+        let retryTimer = undefined as NodeJS.Timeout | undefined;
         function dispose() {
-            document.removeEventListener('visibilitychange', onVisibilityChange);
-            window.clearTimeout(retryTimer);
+            // document.removeEventListener('visibilitychange', onVisibilityChange);
+            clearTimeout(retryTimer);
             curRequestController.abort();
         }
 
@@ -97,7 +99,7 @@ export function fetchEventSource(input: RequestInfo, {
             resolve(); // don't waste time constructing/logging errors
         });
 
-        const fetch = inputFetch ?? window.fetch;
+        const fetch = inputFetch ?? nodeFetch;
         const onopen = inputOnOpen ?? defaultOnOpen;
         async function create() {
             curRequestController = new AbortController();
@@ -131,8 +133,8 @@ export function fetchEventSource(input: RequestInfo, {
                     try {
                         // check if we need to retry:
                         const interval: any = onerror?.(err) ?? retryInterval;
-                        window.clearTimeout(retryTimer);
-                        retryTimer = window.setTimeout(create, interval);
+                        clearTimeout(retryTimer);
+                        retryTimer = setTimeout(create, interval);
                     } catch (innerErr) {
                         // we should not retry anymore:
                         dispose();

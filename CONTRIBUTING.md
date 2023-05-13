@@ -1,4 +1,4 @@
-# Contributing to @microsoft/fetch-event-source
+# Contributing to @ai-zen/node-fetch-event-source
 
 Please take a moment to review this document in order to make the contribution process easy and effective for everyone involved.
 

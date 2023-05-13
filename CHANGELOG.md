@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.1.0
+Only support nodejs.
+
 ## 2.0.1
 This release adds support for esmodule imports (see #4).
 

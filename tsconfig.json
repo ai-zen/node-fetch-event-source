@@ -2,6 +2,7 @@
     "compilerOptions": {
         "target": "ES2017",
         "module": "commonjs",
+        "moduleResolution": "node",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "rootDir": "src",
@@ -15,8 +16,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "lib": [
-            "DOM",
-            "ES2018"
+            "ESNext"
         ]
     }
 }
