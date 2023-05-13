@@ -1,7 +1,7 @@
 {
   "name": "@ai-zen/node-fetch-event-source",
   "version": "2.0.1",
-  "description": "A better API for making Event Source requests, with all the features of fetch()",
+  "description": "A better API for making Event Source requests, with all the features of node-fetch",
   "homepage": "https://github.com/Azure/fetch-event-source#readme",
   "repository": "github:ai-zen/node-fetch-event-source",
   "bugs": {
