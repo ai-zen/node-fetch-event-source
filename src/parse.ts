@@ -20,7 +20,16 @@ export interface EventSourceMessage {
  * @param onChunk A function that will be called on each new byte chunk in the stream.
  * @returns {Promise<void>} A promise that will be resolved when the stream closes.
  */
-export async function getBytes(stream: NodeJS.ReadableStream, onChunk: (arr: Uint8Array) => void) {
+export async function getBytes(stream: NodeJS.ReadableStream | ReadableStream<Uint8Array>, onChunk: (arr: Uint8Array) => void) {
+    if ('getReader' in stream) {
+        const reader = stream.getReader();
+        let result: Awaited<ReturnType<typeof reader.read>>;
+        while (!(result = await reader.read()).done) {
+            onChunk(result.value);
+        }
+        return
+    }
+
     // see https://github.com/Azure/fetch-event-source/pull/28#issuecomment-1421976714
     for await (const chunk of stream) {
         onChunk(chunk as Buffer);

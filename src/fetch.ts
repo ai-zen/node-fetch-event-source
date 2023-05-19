@@ -1,6 +1,5 @@
-import fetch from 'node-fetch';
 import { EventSourceMessage, getBytes, getLines, getMessages } from './parse';
-import nodeFetch, { RequestInfo, RequestInit, Response } from 'node-fetch'
+import crossFetch from 'cross-fetch'
 
 export const EventStreamContentType = 'text/event-stream';
 
@@ -99,7 +98,7 @@ export function fetchEventSource(input: RequestInfo, {
             resolve(); // don't waste time constructing/logging errors
         });
 
-        const fetch = inputFetch ?? nodeFetch;
+        const fetch = inputFetch ?? crossFetch;
         const onopen = inputOnOpen ?? defaultOnOpen;
         async function create() {
             curRequestController = new AbortController();
