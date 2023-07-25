@@ -17,6 +17,7 @@
         "noUnusedParameters": true,
         "lib": [
             "ESNext"
-        ]
+        ],
+        "types": ["node", "jasmine"]
     }
 }
