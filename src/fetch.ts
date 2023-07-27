@@ -1,3 +1,5 @@
+/// <reference lib="dom" />
+
 import { EventSourceMessage, getBytes, getLines, getMessages } from './parse';
 import crossFetch from 'cross-fetch'
 
