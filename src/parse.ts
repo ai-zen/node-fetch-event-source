@@ -21,7 +21,7 @@ export interface EventSourceMessage {
  * @param onChunk A function that will be called on each new byte chunk in the stream.
  * @returns {Promise<void>} A promise that will be resolved when the stream closes.
  */
-export async function getBytes(stream: NodeJS.ReadableStream | ReadableStream<Uint8Array>, onChunk: (arr: Uint8Array) => void) {
+export async function getBytes(stream: ReadableStream<Uint8Array>, onChunk: (arr: Uint8Array) => void) {
     if ('getReader' in stream) {
         const reader = stream.getReader();
         let result: Awaited<ReturnType<typeof reader.read>>;
@@ -32,9 +32,13 @@ export async function getBytes(stream: NodeJS.ReadableStream | ReadableStream<Ui
     }
 
     // see https://github.com/Azure/fetch-event-source/pull/28#issuecomment-1421976714
-    for await (const chunk of stream) {
-        onChunk(chunk as Buffer);
+    if (typeof stream[Symbol.asyncIterator] === 'function') {
+        for await (const chunk of stream as any) {
+            onChunk(chunk);
+        }
     }
+
+    throw new Error('Unsupported stream type, The stream does not have a reader or async iterator.');
 }
 
 const enum ControlChars {
@@ -74,10 +78,10 @@ export function getLines(onLine: (line: Uint8Array, fieldLength: number) => void
                 if (buffer[position] === ControlChars.NewLine) {
                     lineStart = ++position; // skip to next char
                 }
-                
+
                 discardTrailingNewline = false;
             }
-            
+
             // start looking forward till the end of line:
             let lineEnd = -1; // index of the \r or \n char
             for (; position < bufLength && lineEnd === -1; ++position) {

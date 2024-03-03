@@ -18,6 +18,8 @@
         "lib": [
             "ESNext"
         ],
-        "types": ["node", "jasmine"]
+        "types": [
+            "jasmine"
+        ]
     }
 }

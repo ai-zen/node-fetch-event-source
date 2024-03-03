@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.1.3
+Supports browsers and nodejs.
+
 ## 2.1.0
 Only support nodejs.
 

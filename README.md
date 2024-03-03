@@ -94,7 +94,10 @@ fetchEventSource('/api/sse', {
 ```
 
 # Compatibility
-This library is written in typescript and only supports nodejs.
+This library is written in typescript and targets ES2017 features supported by nodejs and all evergreen browsers (Chrome, Firefox, Safari, Edge.) You might need to [polyfill TextDecoder](https://www.npmjs.com/package/fast-text-encoding) for old Edge (versions < 79), though:
+```js
+require('fast-text-encoding');
+```
 
 # Contributing
 
