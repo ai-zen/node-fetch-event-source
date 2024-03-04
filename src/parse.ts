@@ -36,6 +36,7 @@ export async function getBytes(stream: ReadableStream<Uint8Array>, onChunk: (arr
         for await (const chunk of stream as any) {
             onChunk(chunk);
         }
+        return
     }
 
     throw new Error('Unsupported stream type, The stream does not have a reader or async iterator.');
